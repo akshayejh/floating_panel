@@ -1,0 +1,19 @@
+name: floatingpanel
+description: Floating panel helps in creating floating menu.
+version: 1.1.0
+authors:
+  - Akshaye JH
+homepage: https://github.com/akshayejh/floating_box
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
