@@ -51,6 +51,8 @@ These are all the properties you can customize of the floating panel.
     
             // Add Float Box Panel at the bottom of the 'stack' widget.
             FloatBoxPanel(
+                positionTop: 0.0, // Initial Top Position
+                positionLeft: 0.0, // Initial Left Position
                 backgroundColor: Color(0xFFEDEDED), // Color of the panel
                 contentColor: Colors.black, // Color of the icons
                 panelShape: PanelShape.rectangle, // 'PanelShape.rectangle' or 'PanelShape.rounded', border radius property doesn't work in the rounded shape

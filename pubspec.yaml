@@ -1,9 +1,9 @@
 name: floatingpanel
 description: Floating panel helps in creating floating menu.
-version: 1.1.0
+version: 1.1.1
 authors:
   - Akshaye JH
-homepage: https://github.com/akshayejh/floating_box
+homepage: https://github.com/akshayejh/floating_panel
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
