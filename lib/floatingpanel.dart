@@ -31,26 +31,26 @@ class FloatBoxPanel extends StatefulWidget {
 
   FloatBoxPanel(
       {this.buttons,
-        this.positionTop,
-        this.positionLeft,
-        this.borderColor,
-        this.borderWidth,
-        this.iconSize,
-        this.panelIcon,
-        this.size,
-        this.borderRadius,
-        this.panelState,
-        this.panelOpenOffset,
-        this.panelAnimDuration,
-        this.panelAnimCurve,
-        this.backgroundColor,
-        this.contentColor,
-        this.panelShape,
-        this.dockType,
-        this.dockOffset,
-        this.dockAnimCurve,
-        this.dockAnimDuration,
-        this.onPressed});
+      this.positionTop,
+      this.positionLeft,
+      this.borderColor,
+      this.borderWidth,
+      this.iconSize,
+      this.panelIcon,
+      this.size,
+      this.borderRadius,
+      this.panelState,
+      this.panelOpenOffset,
+      this.panelAnimDuration,
+      this.panelAnimCurve,
+      this.backgroundColor,
+      this.contentColor,
+      this.panelShape,
+      this.dockType,
+      this.dockOffset,
+      this.dockAnimCurve,
+      this.dockAnimDuration,
+      this.onPressed});
 
   @override
   _FloatBoxState createState() => _FloatBoxState();
@@ -74,9 +74,6 @@ class _FloatBoxState extends State<FloatBoxPanel> {
   // e.g: When panel opened or closed, the position should change in a different
   // speed than when the panel is being dragged;
   int _movementSpeed = 0;
-
-  // Visibility of the content;
-  bool _contentVisibility = false;
 
   @override
   void initState() {
@@ -145,9 +142,10 @@ class _FloatBoxState extends State<FloatBoxPanel> {
         // Panel height will be in multiple of total buttons, I have added "1"
         // digit height for each button to fix the overflow issue. Don't know
         // what's causing this, but adding "1" fixed the problem for now.
-        return (_widgetSize + (_widgetSize + 1) * _totalButtons()) + (widget.borderWidth ?? 0);
+        return (_widgetSize + (_widgetSize + 1) * _totalButtons()) +
+            (widget.borderWidth ?? 0);
       } else {
-        return _widgetSize + (widget.borderWidth ?? 0) * 2 ;
+        return _widgetSize + (widget.borderWidth ?? 0) * 2;
       }
     }
 
@@ -172,7 +170,7 @@ class _FloatBoxState extends State<FloatBoxPanel> {
 
     // Panel border is only enabled if the border width is greater than 0;
     Border _panelBorder() {
-      if(widget.borderWidth != null && widget.borderWidth > 0) {
+      if (widget.borderWidth != null && widget.borderWidth > 0) {
         return Border.all(
           color: widget.borderColor ?? Color(0xFF333333),
           width: widget.borderWidth ?? 0.0,
@@ -228,9 +226,11 @@ class _FloatBoxState extends State<FloatBoxPanel> {
             // Gesture detector is required to detect the tap and drag on the panel;
             GestureDetector(
               onPanEnd: (event) {
-                setState(() {
-                  _forceDock();
-                });
+                setState(
+                  () {
+                    _forceDock();
+                  },
+                );
               },
               onPanStart: (event) {
                 // Detect the offset between the top and left side of the panel and
@@ -239,80 +239,69 @@ class _FloatBoxState extends State<FloatBoxPanel> {
                 _panOffsetLeft = event.globalPosition.dx - _positionLeft;
               },
               onPanUpdate: (event) {
-                setState(() {
-                  // Close Panel if opened;
-                  _panelState = PanelState.closed;
-                  _contentVisibility = false;
-
-                  // Reset Movement Speed;
-                  _movementSpeed = 0;
-
-                  // Calculate the top position of the panel according to pan;
-                  _positionTop = event.globalPosition.dy - _panOffsetTop;
-
-                  // Check if the top position is exceeding the dock boundaries;
-                  if (_positionTop < 0 + _dockBoundary()) {
-                    _positionTop = 0 + _dockBoundary();
-                  }
-                  if (_positionTop >
-                      (_pageHeight - _panelHeight()) - _dockBoundary()) {
-                    _positionTop =
-                        (_pageHeight - _panelHeight()) - _dockBoundary();
-                  }
-
-                  // Calculate the Left position of the panel according to pan;
-                  _positionLeft = event.globalPosition.dx - _panOffsetLeft;
-
-                  // Check if the left position is exceeding the dock boundaries;
-                  if (_positionLeft < 0 + _dockBoundary()) {
-                    _positionLeft = 0 + _dockBoundary();
-                  }
-                  if (_positionLeft >
-                      (_pageWidth - _widgetSize) - _dockBoundary()) {
-                    _positionLeft =
-                        (_pageWidth - _widgetSize) - _dockBoundary();
-                  }
-                });
-              },
-              onTap : () {
-                setState(() {
-                  // Set the animation speed to custom duration;
-                  _movementSpeed = widget.panelAnimDuration ?? 200;
-
-                  if (_panelState == PanelState.open) {
-                    // If panel state is "open", set it to "closed";
+                setState(
+                  () {
+                    // Close Panel if opened;
                     _panelState = PanelState.closed;
 
-                    // Reset panel position, dock it to nearest edge;
-                    _forceDock();
+                    // Reset Movement Speed;
+                    _movementSpeed = 0;
 
-                    // Hide the content
-                    _contentVisibility = false;
+                    // Calculate the top position of the panel according to pan;
+                    _positionTop = event.globalPosition.dy - _panOffsetTop;
 
-                    print("Float panel closed.");
-                  } else {
-                    // If panel state is "closed", set it to "open";
-                    _panelState = PanelState.open;
+                    // Check if the top position is exceeding the dock boundaries;
+                    if (_positionTop < 0 + _dockBoundary()) {
+                      _positionTop = 0 + _dockBoundary();
+                    }
+                    if (_positionTop >
+                        (_pageHeight - _panelHeight()) - _dockBoundary()) {
+                      _positionTop =
+                          (_pageHeight - _panelHeight()) - _dockBoundary();
+                    }
 
-                    // Set the left side position;
-                    _positionLeft = _openDockLeft();
+                    // Calculate the Left position of the panel according to pan;
+                    _positionLeft = event.globalPosition.dx - _panOffsetLeft;
 
-                    _calcPanelTop();
+                    // Check if the left position is exceeding the dock boundaries;
+                    if (_positionLeft < 0 + _dockBoundary()) {
+                      _positionLeft = 0 + _dockBoundary();
+                    }
+                    if (_positionLeft >
+                        (_pageWidth - _widgetSize) - _dockBoundary()) {
+                      _positionLeft =
+                          (_pageWidth - _widgetSize) - _dockBoundary();
+                    }
+                  },
+                );
+              },
+              onTap: () {
+                setState(
+                  () {
+                    // Set the animation speed to custom duration;
+                    _movementSpeed = widget.panelAnimDuration ?? 200;
 
-                    _contentVisibility = true; // TODO:: Content visibility no longer required.
+                    if (_panelState == PanelState.open) {
+                      // If panel state is "open", set it to "closed";
+                      _panelState = PanelState.closed;
 
-                    // Display content once the animation is finished;
-                    /*
-                    Future.delayed(Duration(milliseconds: widget.panelAnimDuration ?? 200), () {
-                      setState(() {
-                        _contentVisibility = true;
-                      });
-                    });
-                     */
+                      // Reset panel position, dock it to nearest edge;
+                      _forceDock();
 
-                    print("Float Panel Open.");
-                  }
-                });
+                      print("Float panel closed.");
+                    } else {
+                      // If panel state is "closed", set it to "open";
+                      _panelState = PanelState.open;
+
+                      // Set the left side position;
+                      _positionLeft = _openDockLeft();
+
+                      _calcPanelTop();
+
+                      print("Float Panel Open.");
+                    }
+                  },
+                );
               },
               child: _FloatButton(
                 size: widget.size ?? 70.0,
@@ -340,7 +329,7 @@ class _FloatBoxState extends State<FloatBoxPanel> {
                   }),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
