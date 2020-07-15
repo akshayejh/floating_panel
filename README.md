@@ -7,7 +7,7 @@ Float Box - v1.0
 
 ## Overview
 
-[![alt Floating Panel](https://github.com/akshayejh/floating_box/blob/master/cover.png?raw=true)](https://github.com/akshayejh/floating_box)
+[![alt Floating Panel](https://github.com/akshayejh/floating_panel/blob/master/cover.png?raw=true)](https://github.com/akshayejh/floating_box)
 
 Float box is a true floating panel for your app, which can be docked to either edges of the screen (horizontally).
 
@@ -35,7 +35,7 @@ Stack(
 );
 ```
 
-![alt Floating Panel](https://github.com/akshayejh/floating_box/blob/master/ezgif-6-1bb184e6eaae.gif?raw=true)
+![alt Floating Panel](https://github.com/akshayejh/floating_panel/blob/master/preview_default.gif?raw=true)
 
 # Code - All Properties:
 
