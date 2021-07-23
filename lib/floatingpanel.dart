@@ -21,7 +21,6 @@ class FloatBoxPanel extends StatefulWidget {
   final Color contentColor;
   final PanelShape panelShape;
 
-  // final PanelState panelState;
   final double panelOpenOffset;
   final int panelAnimDuration;
   final Curve panelAnimCurve;
@@ -44,7 +43,6 @@ class FloatBoxPanel extends StatefulWidget {
     this.panelIcon = Icons.add,
     this.size = 70,
     BorderRadius? borderRadius,
-    // this.panelState = PanelState.closed,
     this.panelOpenOffset = 30.0,
     this.panelAnimDuration = 600,
     this.panelAnimCurve = Curves.fastLinearToSlowEaseIn,
