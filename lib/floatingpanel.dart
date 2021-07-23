@@ -374,7 +374,7 @@ class _FloatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white.withOpacity(0.0),
+      color: Colors.transparent,
       width: size,
       height: size,
       child: Icon(
