@@ -27,30 +27,31 @@ class FloatBoxPanel extends StatefulWidget {
   final int dockAnimDuration;
   final Curve dockAnimCurve;
   final List<IconData> buttons;
-  final Function(int) onPressed;
+  final void Function(int)? onPressed;
 
-  FloatBoxPanel(
-      {this.buttons,
-      this.positionTop,
-      this.positionLeft,
-      this.borderColor,
-      this.borderWidth,
-      this.iconSize,
-      this.panelIcon,
-      this.size,
-      this.borderRadius,
-      this.panelState,
-      this.panelOpenOffset,
-      this.panelAnimDuration,
-      this.panelAnimCurve,
-      this.backgroundColor,
-      this.contentColor,
-      this.panelShape,
-      this.dockType,
-      this.dockOffset,
-      this.dockAnimCurve,
-      this.dockAnimDuration,
-      this.onPressed});
+  FloatBoxPanel({
+    this.buttons = const [],
+    this.positionTop = 0,
+    this.positionLeft = 0,
+    this.borderColor = const Color(0xFF333333),
+    this.borderWidth = 0,
+    this.iconSize = 24,
+    this.panelIcon = Icons.add,
+    this.size = 70,
+    BorderRadius? borderRadius,
+    this.panelState = PanelState.closed,
+    this.panelOpenOffset = 30.0,
+    this.panelAnimDuration = 600,
+    this.panelAnimCurve = Curves.fastLinearToSlowEaseIn,
+    this.backgroundColor = const Color(0xFF333333),
+    this.contentColor = Colors.white,
+    this.panelShape = PanelShape.rounded,
+    this.dockType = DockType.outside,
+    this.dockOffset = 20,
+    this.dockAnimCurve = Curves.fastLinearToSlowEaseIn,
+    this.dockAnimDuration = 300,
+    this.onPressed,
+  }) : this.borderRadius = borderRadius ?? BorderRadius.circular(0);
 
   @override
   _FloatBoxState createState() => _FloatBoxState();
@@ -77,8 +78,8 @@ class _FloatBoxState extends State<FloatBoxPanel> {
 
   @override
   void initState() {
-    _positionTop = widget.positionTop ?? 0;
-    _positionLeft = widget.positionLeft ?? 0;
+    _positionTop = widget.positionTop;
+    _positionLeft = widget.positionLeft;
 
     super.initState();
   }
@@ -93,47 +94,42 @@ class _FloatBoxState extends State<FloatBoxPanel> {
     List<IconData> _buttons = widget.buttons;
 
     // Dock offset creates the boundary for the page depending on the DockType;
-    double _dockOffset = widget.dockOffset ?? 20.0;
+    double _dockOffset = widget.dockOffset;
 
     // Widget size if the width of the panel;
-    double _widgetSize = widget.size ?? 70.0;
+    double _widgetSize = widget.size;
 
     // **** METHODS ****
 
     // Dock boundary is calculated according to the dock offset and dock type.
     double _dockBoundary() {
-      if (widget.dockType != null && widget.dockType == DockType.inside) {
+      if (widget.dockType == DockType.inside) {
         // If it's an 'inside' type dock, dock offset will remain the same;
         return _dockOffset;
-      } else {
-        // If it's an 'outside' type dock, dock offset will be inverted, hence
-        // negative value;
-        return -_dockOffset;
       }
+
+      // If it's an 'outside' type dock, dock offset will be inverted, hence
+      // negative value;
+      return -_dockOffset;
     }
 
     // If panel shape is set to rectangle, the border radius will be set to custom
     // border radius property of the WIDGET, else it will be set to the size of
     // widget to make all corners rounded.
     BorderRadius _borderRadius() {
-      if (widget.panelShape != null &&
-          widget.panelShape == PanelShape.rectangle) {
+      if (widget.panelShape == PanelShape.rectangle) {
         // If panel shape is 'rectangle', border radius can be set to custom or 0;
-        return widget.borderRadius ?? BorderRadius.circular(0);
-      } else {
-        // If panel shape is 'rounded', border radius will be the size of widget
-        // to make it rounded;
-        return BorderRadius.circular(_widgetSize);
+        return widget.borderRadius;
       }
+
+      // If panel shape is 'rounded', border radius will be the size of widget
+      // to make it rounded;
+      return BorderRadius.circular(_widgetSize);
     }
 
     // Total buttons are required to calculate the height of the panel;
     double _totalButtons() {
-      if (widget.buttons == null) {
-        return 0;
-      } else {
-        return widget.buttons.length.toDouble();
-      }
+      return widget.buttons.length.toDouble();
     }
 
     // Height of the panel according to the panel state;
@@ -143,10 +139,10 @@ class _FloatBoxState extends State<FloatBoxPanel> {
         // digit height for each button to fix the overflow issue. Don't know
         // what's causing this, but adding "1" fixed the problem for now.
         return (_widgetSize + (_widgetSize + 1) * _totalButtons()) +
-            (widget.borderWidth ?? 0);
-      } else {
-        return _widgetSize + (widget.borderWidth ?? 0) * 2;
+            (widget.borderWidth);
       }
+
+      return _widgetSize + (widget.borderWidth) * 2;
     }
 
     // Panel top needs to be recalculated while opening the panel, to make sure
@@ -161,23 +157,23 @@ class _FloatBoxState extends State<FloatBoxPanel> {
     double _openDockLeft() {
       if (_positionLeft < (_pageWidth / 2)) {
         // If panel is docked to the left;
-        return widget.panelOpenOffset ?? 30.0;
-      } else {
-        // If panel is docked to the right;
-        return ((_pageWidth - _widgetSize)) - (widget.panelOpenOffset ?? 30.0);
+        return widget.panelOpenOffset;
       }
+
+      // If panel is docked to the right;
+      return ((_pageWidth - _widgetSize)) - (widget.panelOpenOffset);
     }
 
     // Panel border is only enabled if the border width is greater than 0;
-    Border _panelBorder() {
-      if (widget.borderWidth != null && widget.borderWidth > 0) {
+    Border? _panelBorder() {
+      if (widget.borderWidth > 0) {
         return Border.all(
-          color: widget.borderColor ?? Color(0xFF333333),
-          width: widget.borderWidth ?? 0.0,
+          color: widget.borderColor,
+          width: widget.borderWidth,
         );
-      } else {
-        return null;
       }
+
+      return null;
     }
 
     // Force dock will dock the panel to it's nearest edge of the screen;
@@ -186,7 +182,7 @@ class _FloatBoxState extends State<FloatBoxPanel> {
       double center = _positionLeft + (_widgetSize / 2);
 
       // Set movement speed to the custom duration property or '300' default;
-      _movementSpeed = widget.dockAnimDuration ?? 300;
+      _movementSpeed = widget.dockAnimDuration;
 
       // Check if the position of center of the panel is less than half of the
       // page;
@@ -202,24 +198,22 @@ class _FloatBoxState extends State<FloatBoxPanel> {
     // Animated positioned widget can be moved to any part of the screen with
     // animation;
     return AnimatedPositioned(
-      duration: Duration(
-        milliseconds: _movementSpeed,
-      ),
+      duration: Duration(milliseconds: _movementSpeed),
       top: _positionTop,
       left: _positionLeft,
-      curve: widget.dockAnimCurve ?? Curves.fastLinearToSlowEaseIn,
+      curve: widget.dockAnimCurve,
 
       // Animated Container is used for easier animation of container height;
       child: AnimatedContainer(
-        duration: Duration(milliseconds: widget.panelAnimDuration ?? 600),
+        duration: Duration(milliseconds: widget.panelAnimDuration),
         width: _widgetSize,
         height: _panelHeight(),
         decoration: BoxDecoration(
-          color: widget.backgroundColor ?? Color(0xFF333333),
+          color: widget.backgroundColor,
           borderRadius: _borderRadius(),
           border: _panelBorder(),
         ),
-        curve: widget.panelAnimCurve ?? Curves.fastLinearToSlowEaseIn,
+        curve: widget.panelAnimCurve,
         child: Wrap(
           direction: Axis.horizontal,
           children: [
@@ -279,7 +273,7 @@ class _FloatBoxState extends State<FloatBoxPanel> {
                 setState(
                   () {
                     // Set the animation speed to custom duration;
-                    _movementSpeed = widget.panelAnimDuration ?? 200;
+                    _movementSpeed = widget.panelAnimDuration;
 
                     if (_panelState == PanelState.open) {
                       // If panel state is "open", set it to "closed";
@@ -304,29 +298,34 @@ class _FloatBoxState extends State<FloatBoxPanel> {
                 );
               },
               child: _FloatButton(
-                size: widget.size ?? 70.0,
-                icon: widget.panelIcon ?? Icons.add,
-                color: widget.contentColor ?? Colors.white,
-                iconSize: widget.iconSize ?? 24.0,
+                size: widget.size,
+                icon: widget.panelIcon,
+                color: widget.contentColor,
+                iconSize: widget.iconSize,
               ),
             ),
             Visibility(
               visible: true, // TODO:: _contentVisibility,
               child: Container(
                 child: Column(
-                  children: List.generate(_buttons.length, (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        widget.onPressed(index);
-                      },
-                      child: _FloatButton(
-                        size: widget.size ?? 70.0,
-                        icon: _buttons[index] ?? Icons.add,
-                        color: widget.contentColor ?? Colors.white,
-                        iconSize: widget.iconSize ?? 24.0,
-                      ),
-                    );
-                  }),
+                  children: List.generate(
+                    _buttons.length,
+                    (index) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (widget.onPressed != null) {
+                            widget.onPressed!(index);
+                          }
+                        },
+                        child: _FloatButton(
+                          size: widget.size,
+                          icon: _buttons[index],
+                          color: widget.contentColor,
+                          iconSize: widget.iconSize,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -343,18 +342,23 @@ class _FloatButton extends StatelessWidget {
   final IconData icon;
   final double iconSize;
 
-  _FloatButton({this.size, this.color, this.icon, this.iconSize});
+  _FloatButton({
+    this.size = 70,
+    this.color = Colors.white,
+    this.icon = Icons.add,
+    this.iconSize = 24,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white.withOpacity(0.0),
-      width: size ?? 70.0,
-      height: size ?? 70.0,
+      width: size,
+      height: size,
       child: Icon(
-        icon ?? Icons.add,
-        color: color ?? Colors.white,
-        size: iconSize ?? 24.0,
+        icon,
+        color: color,
+        size: iconSize,
       ),
     );
   }
