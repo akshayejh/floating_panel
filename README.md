@@ -1,8 +1,6 @@
 
 # Flutter Float Box
 
-[![alt Become a patron](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://patreon.com/akshayejh)
-
 Float Box - v1.0
 
 ## Overview
